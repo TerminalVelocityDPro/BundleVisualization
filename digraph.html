@@ -1,29 +1,35 @@
 ﻿<!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Series Parallel Tree</title>
-    <script type="text/javascript" src = "https://d3js.org/d3.v4.min.js">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script type="text/javascript" src="https://d3js.org/d3.v4.min.js">
 
     </script>
-  </head>
+</head>
   <body>
-    <header>
-     Bundle Decomposition/Expansion Visualization
-    </header>
-    <header>
-    ++++++++++++++++++++++++++++++++++++++++++++++
-    </header>
-    <header>
-        Ctrl-Click to collapse
-    </header>
-      <header>
+      <div>
+      <h1>
+          Bundle Decomposition/Expansion Visualization
+      </h1>
+      
+      <h2>
+          Ctrl-Click to collapse
+      </h2>
+      <h2>
           Click to Expand
-      </header>
+      </h2>
+      </div>
 
-    
+      <input type="button" id="btnFileUpload" value="Select File" />
+      <span id="spnFilePath"></span>
+      <input type="file" id="FileUpload1" style="display: none" />
 
-    <script type="text/javascript" src="digraph.js"></script>
+
+
+
+      <script type="text/javascript" src="digraph.js"></script>
 
   </body>
 </html>

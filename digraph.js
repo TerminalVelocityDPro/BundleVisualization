@@ -1,3 +1,34 @@
+
+
+
+window.onload = function () {
+        var fileupload = document.getElementById("FileUpload1");
+        var filePath = document.getElementById("spnFilePath");
+        var button = document.getElementById("btnFileUpload");
+        
+        
+        button.onclick = function () {
+            fileupload.click();
+        };
+        fileupload.onchange = function () {
+            clearMap();
+       
+            var fileName = fileupload.value.split('\\')[fileupload.value.split('\\').length - 1];
+            filePath.innerHTML = "<b>Selected File: </b>" + fileName;
+            setUpMap(fileName);
+
+   };
+};
+
+
+function clearMap(){
+var svg = d3.select("body").select("svg").remove();
+
+}
+
+
+
+function setUpMap(fileNameFinal){
 var w = 10000;
       var h = 10000;
 
@@ -11,8 +42,14 @@ var w = 10000;
       var layer = 0;
       var lastLayer = -1;
 
+      
+
+
+
 
       var svg = d3.select("body").append("svg");
+
+
       //svg is a reference pointing to the SVG object just created
       svg.attr("width", w).attr("height", h);
 
@@ -84,7 +121,7 @@ var w = 10000;
       }
 
 
-      d3.json("test0.json", function(data){
+      d3.json(fileNameFinal, function(data){
         nodeMap = returnNodeAndEdgeMap(data)[0];
         edgeMap = returnNodeAndEdgeMap(data)[1];
         for(i = 0; i < nodeMap.length; i++){
@@ -1155,3 +1192,12 @@ var w = 10000;
         }
 
       }
+
+}
+
+
+
+
+
+
+
