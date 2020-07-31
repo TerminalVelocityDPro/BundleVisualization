@@ -9,22 +9,38 @@
     </script>
 </head>
   <body>
-      <div>
-      <h1>
-          Bundle Decomposition/Expansion Visualization
-      </h1>
-      
-      <h2>
-          Ctrl-Click to collapse
-      </h2>
-      <h2>
-          Click to Expand
-      </h2>
+      <div class="gridder">
+          <div class="container">
+              <h1>
+                  Bundle Decomposition/Expansion Visualization
+              </h1>
+
+              <h2 class="collapse">
+                  Ctrl-Click to Collapse
+              </h2>
+              <h2 class="expand">
+                  Click to Expand
+              </h2>
+              <div class="upload">
+                  <input type="button" id="btnFileUpload" value="Select File" />
+                  <span id="spnFilePath"></span>
+                  <input type="file" id="FileUpload1" style="display: none" />
+              </div>
+          </div>
+          <div class="link">
+              <p ><a href="https://github.com/TerminalVelocityDPro/BundleVisualization" target="_blank" rel="nofollow">Go to the GitHub Repository</a></p>
+          </div>
+          
+
       </div>
 
-      <input type="button" id="btnFileUpload" value="Select File" />
-      <span id="spnFilePath"></span>
-      <input type="file" id="FileUpload1" style="display: none" />
+
+
+
+
+      
+
+      
 
 
 
