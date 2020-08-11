@@ -9,4 +9,3 @@ If Python 3 installed, run python -m http.server 8000 inside of the directory of
 
 Then, go to any browser and search localhost:8000. Choose digraph.html from there. 
 
-Congragulations! Now you can run the Bundle Decomposition/Expansion Visualizer!
