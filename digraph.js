@@ -1,18 +1,15 @@
-
-
-
 window.onload = function () {
         var fileupload = document.getElementById("FileUpload1");
         var filePath = document.getElementById("spnFilePath");
         var button = document.getElementById("btnFileUpload");
-        
-        
+
+
         button.onclick = function () {
             fileupload.click();
         };
         fileupload.onchange = function () {
             clearMap();
-       
+
             var fileName = fileupload.value.split('\\')[fileupload.value.split('\\').length - 1];
             filePath.innerHTML = "<b>Selected File: </b>" + fileName;
             setUpMap(fileName);
@@ -23,8 +20,9 @@ window.onload = function () {
 
 function clearMap(){
 var svg = d3.select("body").select("svg").remove();
-
 }
+
+
 
 
 
@@ -42,7 +40,7 @@ var w = 10000;
       var layer = 0;
       var lastLayer = -1;
 
-      
+
 
 
 
@@ -71,7 +69,7 @@ var w = 10000;
       }
 
 
-      
+
 
       function cleanse(){
         for(i = 0; i < nodeMap.length; i++){
@@ -257,9 +255,9 @@ var w = 10000;
           for(j = 0; j < neighbors.length; j++){
             if(neighbors[j][0].status != "bundleZombie"){
             every_neighbor_s.push(neighbors[j]);
-            
+
 			}
-            
+
           }
         }
 
@@ -450,7 +448,7 @@ var w = 10000;
             break;
           }
           else{
-          //console.log("meme");  
+          //console.log("meme");
             side2 = [];
             for(r = 0; r < side3.length; r++){
               side2.push(side3[r]);
@@ -538,7 +536,7 @@ var w = 10000;
         nodeMap[i].present();
 	   }
 	  }
-      
+
 	  }
 
       function collapseBundle(name, nodeMap, edgeMap){
@@ -588,19 +586,19 @@ var w = 10000;
        //var newNode2 = new Node(averageX+50, averageY+50, newName, layer, "bundleCollapsed", "alive", bundle);
        newNode.getLeftNeighbors(edgeMap);
        newNode.getRightNeighbors(edgeMap);
-       
+
        for(j = 0; j < nodeMap.length; j++){
         for(k = 0; k < bundle.length; k++){
             if(nodeMap[j].name == bundle[k][0].name){
-               nodeMap[j].status = "bundleZombie";  
-			}  
+               nodeMap[j].status = "bundleZombie";
+			}
 		}
 	   }
-       
+
        for(j = 0; j < edgeMap.length; j++){
             for(k = 0; k < bundle.length; k++){
               if(edgeMap[j].node1.name == bundle[k][0].name){
-              
+
                 edgeMap[j].node1.status = "bundleZombie";
                 edgeMap[j].vis = "invis";
                 svg.selectAll("." + edgeMap[j].node1.name).remove();
@@ -609,9 +607,9 @@ var w = 10000;
                 var flag = true;
                 for(m = 0; m < bundle.length; m++){
                     if(bundle[m][0].name == edgeMap[j].node2.name || edgeMap[j].node2.status == "bundleZombie"){
-                    
-                    flag = false;                                   
-					}        
+
+                    flag = false;
+					}
 				}
                 if(flag){
                 var newEdge = new Edge(newNode, edgeMap[j].node2, 0, "vis");
@@ -621,14 +619,14 @@ var w = 10000;
                 newEdge.establish();
                 //edgeMap[j].node2.present();
 				}
-                
-                
+
+
               }
               if(edgeMap[j].node2.name == bundle[k][0].name){
               //console.log("getting considererd");
               //console.log(edgeMap[j].node1.name);
               //console.log("getting conc");
-              
+
                 edgeMap[j].node2.status = "bundleZombie";
                 edgeMap[j].vis = "invis";
                 //svg.selectAll("." + edgeMap[j].node1.name).remove();
@@ -638,8 +636,8 @@ var w = 10000;
                 var flag = true;
                 for(m = 0; m < bundle.length; m++){
                     if(bundle[m][0].name == edgeMap[j].node1.name || edgeMap[j].node1.status == "bundleZombie"  ){
-                    flag = false;                                   
-					}        
+                    flag = false;
+					}
 				}
                 if(flag){
                 var newEdge = new Edge(edgeMap[j].node1, newNode, 0, "vis");
@@ -649,8 +647,8 @@ var w = 10000;
                 newEdge.establish();
                 //edgeMap[j].node1.present();
 				}
-                
-                
+
+
               }
             }
           }
@@ -658,7 +656,7 @@ var w = 10000;
         newNode.present();
         //newNode2.present();
 
-        
+
 
         for(i = 0; i < edgeMap.length; i++){
           if(edgeMap[i].vis == "invis"){
@@ -668,13 +666,13 @@ var w = 10000;
         }
         //console.log("This is the bundle I just collapsed");
         for(i = 0; i < bundle.length; i++){
-            //console.log(bundle[i][0].name);  
+            //console.log(bundle[i][0].name);
 		}
 
-        
 
-        
-        
+
+
+
         //console.log("x position");
         //console.log(newNode.x);
         //newNode.present();
@@ -685,7 +683,7 @@ var w = 10000;
         checkDuplicateEdges(edgeMap);
         remakeEdges(edgeMap);
 
-        
+
 
 
 	  }
@@ -697,7 +695,7 @@ var w = 10000;
         nodeMap[i].present();
 	   }
 
-        
+
 	   }
 	  }
 
@@ -757,7 +755,7 @@ var w = 10000;
       for(i = 0; i < nodeMap.length; i++){
        if(nodeMap[i].name == bundleName && nodeMap[i].type == "bundleCollapsed"){
         bundleNode = nodeMap[i];
-	   } 
+	   }
 	  }
       var bundle = bundleNode.bundle;
 
@@ -774,7 +772,7 @@ var w = 10000;
        bundle[i][0].present();
        for(j = 0; j < nodeMap.length; j++){
         if(nodeMap[j].name == bundle[i][0].name){
-            nodeMap[j].status = "alive";  
+            nodeMap[j].status = "alive";
 		}
 	   }
 	   }
@@ -804,30 +802,30 @@ var w = 10000;
             edgeMap[j].establish();
 		}
         }
-        
-              
-		
+
+
+
         //for(j =0; j < edgeMap.length; j++){
-        
+
           //  if(edgeMap[j].node1.status == "bundleZombie" || edgeMap[j].node2.status == "bundleZombie"){
             //var flag = true;
 
             //for(k = 0; k < bundle.length; k++){
               //  if(bundle[k][0].name == edgeMap[j].node1.name || bundle[k][0].name == edgeMap[j].node2.name){
                 //flag = false;
-                            
+
 				//}
             //}
             //if(flag){
-                 
+
 			//}
 
-                     
-			//}  
-		
-              
+
+			//}
+
+
 		//}
-        
+
         svg.selectAll("." + bundleNode.name).remove();
         for(p = 0; p < edgeMap.length; p++){
               if(edgeMap[p].node1.name == bundleNode.name){
@@ -839,15 +837,15 @@ var w = 10000;
               svg.selectAll("." + edgeMap[p].name).remove();
                 edgeMap.splice(p, 1);
                 p = 0;
-              
+
 			  }
             }
 
         bundleNode.status = "dead";
         //cleanse();
 
-        
-        
+
+
 	  }
 
       function finalExpandBundle(nodeMap, edgeMap, bundleName){
@@ -859,7 +857,7 @@ var w = 10000;
 		}
         }
         cleanse();
-       
+
 	  }
 
       function expandBundles(nodeMap, edgeMap){
@@ -938,7 +936,7 @@ var w = 10000;
       }
 
       function adjustBundleEdges(nodeMap, edgeMap){
-      
+
         for(i = 0; i < nodeMap.length; i++){
           if(nodeMap[i].layerNum == layer && nodeMap[i].type == "bundleCollapsed"){
             var bundleFriends = [];
@@ -955,7 +953,7 @@ var w = 10000;
                   bundleFriends.push(nodeMap[j]);
                 }
               }
-              
+
             }
           }
         }
@@ -1059,7 +1057,7 @@ var w = 10000;
 
 
 
-      
+
 
       class Node {
         constructor(x, y, name, layerNum, type, status, bundle) {
@@ -1082,7 +1080,7 @@ var w = 10000;
           .attr("x", this.x)
           .attr("y", this.y)
           .attr("width", 10)
-          .attr("height", 10)
+          .attr("height", 20)
           .attr("fill", "white")
           //.attr("visibility", "hidden")
           .attr("class", this.name);
@@ -1090,10 +1088,14 @@ var w = 10000;
           .attr("x", this.x+10)
           .attr("y", this.y)
           .attr("width", 10)
-          .attr("height", 10)
+          .attr("height", 20)
           .attr("fill", "white")
+
           //.attr("visibility", "hidden")
           .attr("class", this.name);
+
+
+
 
           svg.selectAll("." + this.name)
           .transition()
@@ -1102,35 +1104,50 @@ var w = 10000;
           .delay(100)
           .duration(1200);
 
-          
-          
           var name = this.name;
 
-          var node = svg.selectAll("." + this.name);
-          node.on("click", function(){
+          var xpos = this.x;
+          var ypos = this.y;
 
+
+
+
+
+          var node = svg.selectAll("." + this.name);
+
+          node.on("mouseover", function(){
+	  		console.log(name);
+	  		svg.append("text")
+	  		.attr("x", xpos)
+	  		.attr("y", ypos)
+	  		.attr("stroke", "blue")
+	  		.text(name);
+          });
+
+          node.on("mouseout", function(){
+		  	  		console.log(name + "removing");
+		  	  		svg.selectAll("text").remove();
+          });
+
+
+
+
+
+
+          node.on("click", function(){
           if(d3.event.ctrlKey){
           finalCollapseBundle(name, nodeMap, edgeMap);
+          svg.selectAll("text").remove();
 		  }else{
           //console.log("start");
           //console.log("end");
           finalExpandBundle(nodeMap, edgeMap, name);
-          
+          svg.selectAll("text").remove();
 		  }
-
-
-
-         
-
-
           });
 
-          
-
-            
-
-
         }
+
         getRightNeighbors(edgeMap){
           this.rightNeighbors = [];
           this.i = 0;
@@ -1188,11 +1205,9 @@ var w = 10000;
             .transition()
             .attr("stroke", "black")
             .delay(500)
-            .duration(1250);   
+            .duration(1250);
         }
-
       }
-
 }
 
 
