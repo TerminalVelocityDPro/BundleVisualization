@@ -546,11 +546,7 @@ var w = 10000;
        node = nodeMap[i];
 	   }
 	  }
-       //console.log("name of node: "+name);
-       //console.log("left");
-       //console.log(find_bundle([[node, true]], [], edgeMap).length);
-       //console.log("right");
-       //console.log(find_bundle([[node, false]], [], edgeMap).length);
+
 
        if(find_bundle([[node, false]], [], edgeMap).length == 0){
        //console.log("no right bundle");
@@ -572,7 +568,7 @@ var w = 10000;
        var totalX = 0;
        var totalY = 0;
        var newName = "";
-       for(i = 0; i < bundle    .length; i++){
+       for(i = 0; i < bundle.length; i++){
         totalX = totalX + bundle[i][0].x;
         totalY = bundle[i][0].y;
         newName = newName + bundle[i][0].name;
@@ -655,6 +651,8 @@ var w = 10000;
 
         newNode.present();
         //newNode2.present();
+        svg.selectAll("#red").remove();
+			svg.selectAll("#blue").remove();
 
 
 
@@ -682,21 +680,27 @@ var w = 10000;
         //adjustBundleEdges(nodeMap,edgeMap);
         checkDuplicateEdges(edgeMap);
         remakeEdges(edgeMap);
-
-
-
-
 	  }
 
       function finalCollapseBundle(name, nodeMap, edgeMap){
-       collapseBundle(name, nodeMap, edgeMap);
+		  svg.selectAll("#red").remove();
+			svg.selectAll("#blue").remove();
+
+			collapseBundle(name, nodeMap, edgeMap);
+			svg.selectAll("#red").remove();
+			svg.selectAll("#blue").remove();
+
+
        for(i = 0; i < nodeMap.length; i++){
        if(nodeMap[i].status == "alive"){
+		   console.log(nodeMap[i].name);
         nodeMap[i].present();
 	   }
-
-
+	   console.log(nodeMap[i].name);
 	   }
+	   svg.selectAll("#red").remove();
+			svg.selectAll("#blue").remove();
+
 	  }
 
       function collapseBundles(nodeMap, edgeMap, allBundles, layer){
@@ -1081,15 +1085,18 @@ var w = 10000;
           .attr("y", this.y)
           .attr("width", 10)
           .attr("height", 20)
-          .attr("fill", "white")
+          .attr("fill", "#f7f7f7")
           //.attr("visibility", "hidden")
+          .attr("id", this.name+"red")
+
           .attr("class", this.name);
           svg.append("rect")
           .attr("x", this.x+10)
           .attr("y", this.y)
           .attr("width", 10)
           .attr("height", 20)
-          .attr("fill", "white")
+          .attr("fill", "#f7f7f7")
+          .attr("id", this.name+"blue")
 
           //.attr("visibility", "hidden")
           .attr("class", this.name);
@@ -1097,11 +1104,18 @@ var w = 10000;
 
 
 
-          svg.selectAll("." + this.name)
+          svg.selectAll("#" + this.name + "red")
           .transition()
           .attr("stroke", "white")
-          .attr("fill", "black")
+          .attr("fill", "red")
           .delay(100)
+          .duration(1200);
+
+          svg.selectAll("#" + this.name + "blue")
+		  .transition()
+		  .attr("stroke", "white")
+		  .attr("fill", "blue")
+		  .delay(100)
           .duration(1200);
 
           var name = this.name;
@@ -1122,21 +1136,28 @@ var w = 10000;
 	  		.attr("y", ypos)
 	  		.attr("stroke", "blue")
 	  		.text(name);
+	  		svg.selectAll("#red").remove();
+			svg.selectAll("#blue").remove();
           });
 
           node.on("mouseout", function(){
-		  	  		console.log(name + "removing");
-		  	  		svg.selectAll("text").remove();
+		  	svg.selectAll("text").remove();
+		  	svg.selectAll("#red").remove();
+			svg.selectAll("#blue").remove();
           });
 
-
-
-
-
+          d3.select("body").select("svg").on("mouseover", function(){
+			svg.selectAll("#red").remove();
+			svg.selectAll("#blue").remove();
+		  });
 
           node.on("click", function(){
+			svg.selectAll("#red").remove();
+			svg.selectAll("#blue").remove();
           if(d3.event.ctrlKey){
           finalCollapseBundle(name, nodeMap, edgeMap);
+
+
           svg.selectAll("text").remove();
 		  }else{
           //console.log("start");
@@ -1144,6 +1165,7 @@ var w = 10000;
           finalExpandBundle(nodeMap, edgeMap, name);
           svg.selectAll("text").remove();
 		  }
+
           });
 
         }
@@ -1187,10 +1209,10 @@ var w = 10000;
         }
         establish(){
             svg.append("line")
-            .attr("x1", this.node1.x)
-            .attr("y1", this.node1.y)
+            .attr("x1", this.node1.x+20)
+            .attr("y1", this.node1.y+10)
             .attr("x2", this.node2.x)
-            .attr("y2", this.node2.y)
+            .attr("y2", this.node2.y+10)
             //.transition()
             .attr("stroke", "white")
             //.delay(500)
