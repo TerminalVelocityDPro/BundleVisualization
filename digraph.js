@@ -412,6 +412,7 @@ var w = 10000;
       }
 
       function find_bundle(side1, side2, edgeMap){
+		var nodeName = side1[0][0].name;
         var bundle = [];
         var randomNode = new Node(0,0,"id0",0,"normal", "dead", []);
         var not_found = true;
@@ -434,16 +435,53 @@ var w = 10000;
           var any_change = new_or_not_big(side3, side2);
           if(!any_change){
 
-            for(r = 0; r < side1.length; r++){
-            //console.log("side1");
-            //console.log(side1[r][0].name);
-              bundle.push(side1[r]);
-            }
-            for(r = 0; r < side2.length; r++){
-            //console.log("side2");
-            //console.log(side2[r][0].name);
-              bundle.push(side2[r]);
-            }
+			  if(side1.length == 1 || side2.length == 1){
+				  for(r = 0; r < side1.length; r++){
+				  //console.log("side1");
+				  //console.log(side1[r][0].name);
+				    bundle.push(side1[r]);
+				  }
+				  for(r = 0; r < side2.length; r++){
+				  //console.log("side2");
+				  //console.log(side2[r][0].name);
+				    bundle.push(side2[r]);
+                  }
+			  }else{
+				  console.log("not trivial bundle");
+				  console.log("nodename" + nodeName);
+				  var nodeBool = false;
+
+				  for(r = 0; r < side1.length; r++){
+				              //console.log("side1");
+				              //console.log(side1[r][0].name);
+				              //bundle.push(side1[r]);
+				     if(side1[r][0].name == nodeName){
+					 nodeBool = true;
+					 }
+				  }
+				  console.log(nodeBool);
+				  if(nodeBool){
+					console.log("pushing side 1");
+					  for(r=0; r < side1.length; r++){
+					  //console.log(side1[r][0].name);
+						  bundle.push(side1[r]);
+					  }
+
+				  }
+				  else{
+					  console.log("pushing side 2");
+					  for(r=0; r < side2.length; r++){
+						  bundle.push(side2[r]);
+					  }
+				  }
+				              //for(r = 0; r < side2.length; r++){
+				              //console.log("side2");
+				              //console.log(side2[r][0].name);
+				              //  bundle.push(side2[r]);
+            //}
+			  }
+
+
             not_found = false;
             break;
           }
