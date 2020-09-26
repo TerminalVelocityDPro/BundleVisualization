@@ -435,18 +435,15 @@ var w = 10000;
           var any_change = new_or_not_big(side3, side2);
           if(!any_change){
 
-			  if(side1.length == 1 || side2.length == 1){
-				  for(r = 0; r < side1.length; r++){
-				  //console.log("side1");
-				  //console.log(side1[r][0].name);
-				    bundle.push(side1[r]);
+			  if(side1.length == 1 && side2.length == 1){
+				  for(w = 0; w < side1.length; w++){
+				  	bundle.push(side1[w]);
 				  }
-				  for(r = 0; r < side2.length; r++){
-				  //console.log("side2");
-				  //console.log(side2[r][0].name);
-				    bundle.push(side2[r]);
-                  }
-			  }else{
+				  for(w = 0; w < side2.length; w++){
+				    bundle.push(side2[w]);
+				  }
+			  }
+			  else{
 				  console.log("not trivial bundle");
 				  console.log("nodename" + nodeName);
 				  var nodeBool = false;
@@ -456,10 +453,32 @@ var w = 10000;
 				              //console.log(side1[r][0].name);
 				              //bundle.push(side1[r]);
 				     if(side1[r][0].name == nodeName){
-					 nodeBool = true;
+					 	nodeBool = true;
+					 	if(side1.length == 1){
+							for(w = 0; w < side1.length; w++){
+											  	bundle.push(side1[w]);
+											  }
+											  for(w = 0; w < side2.length; w++){
+											    bundle.push(side2[w]);
+				  }
+						}
 					 }
+
+
 				  }
 				  console.log(nodeBool);
+				  if(!nodeBool){
+					  if(side2.length == 1){
+						  for(w = 0; w < side1.length; w++){
+						  				  	bundle.push(side1[w]);
+						  				  }
+						  				  for(w = 0; w < side2.length; w++){
+						  				    bundle.push(side2[w]);
+				  }
+					  }
+				  }
+
+
 				  if(nodeBool){
 					console.log("pushing side 1");
 					  for(r=0; r < side1.length; r++){
