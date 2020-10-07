@@ -11,39 +11,42 @@
     </script>
 </head>
 <body class="bg-light">
+
+<nav class="navbar navbar-light bg-white shadow border-bottom border-warning rounded-bottom sticky-top col-12">
+    <a class="navbar-brand" href="#">Bundle Visualization</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+        </li>
+
+      </ul>
+    </div>
+</nav>
+
+
+
+
+
+
+
+
+
+
+
     <div>
         <div class="container-fluid">
-        	<div class="row">
-        		<div class="col-12">
-			        Bundle Decomposition/Expansion Visualization
-            	</div>
-        	</div>
+
 
         	<div class="row">
 				<div class="col-12" style="height:20px"></div>
         	</div>
 
         	<div class="row">
-        		<div class="col-3">
-				    Ctrl-Click to Collapse
-
-            	</div>
-            	<div class="col-1">
-
-            	</div>
-            	<div class="col-3">
-					Click to Expand
-            	</div>
-
-
-        	</div>
-
-        	<div class="row">
-							<div class="col-12" style="height:20px"></div>
-        	</div>
-
-        	<div class="row">
-        		<div class="col-12 ">
+        		<div class="col-12 text-center">
 				    <input type="button" id="btnFileUpload" value="Select File" />
 				    <span id="spnFilePath"></span>
 				    <input type="file" id="FileUpload1" style="display: none" />
@@ -55,8 +58,28 @@
 				<div class="col-12" style="height:20px"></div>
         	</div>
 
+        	<div class="row" id="bodyContainer">
+        			<div class="col-2" style="height:500px"></div>
+					<div class="col-8 border border-warning rounded bg-white" id="thebody" style="height:500px"></div>
+					<div class="col-2" style="height:500px"></div>
+        	</div>
+
         	<div class="row">
-        		<div class="col-12 ">
+							<div class="col-12" style="height:20px"></div>
+        	</div>
+
+        	<div class="row">
+			        		<div class="col-12 text-center">
+			        		To operate, use "Select File" to upload a json file of a genome graph converted from vg. When the visualization loads up, press Ctrl-Click to collapse a bundle. Press Click to expand a collapsed bundle.
+			            	</div>
+        	</div>
+
+        	<div class="row">
+							<div class="col-12" style="height:20px"></div>
+        	</div>
+
+        	<div class="row">
+        		<div class="col-12 text-center">
 			        <p><a href="https://github.com/TerminalVelocityDPro/BundleVisualization" target="_blank" rel="nofollow">Go to the GitHub Repository</a></p>
         		</div>
 
@@ -68,17 +91,6 @@
 
 
     </div>
-
-
-
-
-
-
-
-
-
-
-
 
     <script type="text/javascript" src="digraph.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

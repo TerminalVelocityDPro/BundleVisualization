@@ -13,7 +13,6 @@ window.onload = function () {
             var fileName = fileupload.value.split('\\')[fileupload.value.split('\\').length - 1];
             filePath.innerHTML = "<b>Selected File: </b>" + fileName;
             setUpMap(fileName);
-
    };
 };
 
@@ -28,13 +27,14 @@ var svg = d3.select("body").select("svg").remove();
 
 function setUpMap(fileNameFinal){
 var w = 10000;
-      var h = 10000;
+      var h = 500;
 
       var nodeMap = [];
       var leftSide = [];
       var rightSide = [];
       var allBundles = [];
       var beep = false;
+      //var nodeColors = [];
 
       var edgeMap = [];
       var layer = 0;
@@ -45,7 +45,7 @@ var w = 10000;
 
 
 
-      var svg = d3.select("body").append("svg");
+      var svg = d3.select("body").select(".container-fluid").select("#bodyContainer").select("#thebody").append("svg");
 
 
       //svg is a reference pointing to the SVG object just created
@@ -84,8 +84,12 @@ var w = 10000;
         var graph = data;
         var nodeMap2 = [];
         var edgeMap2 = [];
+
         for(i = 0; i < graph.node.length; i++){
-          node1 = new Node(i*30, 100 + (200 * (i%2)), "id" + graph.node[i].id, layer, "normal", "alive", []);
+	      var r = Math.floor(Math.random() * 255);
+	      var g = Math.floor(Math.random() * 255);
+          var b = Math.floor(Math.random() * 255);
+          node1 = new Node(i*60, 100 + (200 * (i%2)), "id" + graph.node[i].id, layer, "normal", "alive", [], r, g, b);
           nodeMap2.push(node1);
         }
         for(i = 0; i < graph.edge.length; i++){
@@ -158,6 +162,7 @@ var w = 10000;
           }
         }
         return node1neighbors;
+
 
       }
 
@@ -412,7 +417,6 @@ var w = 10000;
       }
 
       function find_bundle(side1, side2, edgeMap){
-		var nodeName = side1[0][0].name;
         var bundle = [];
         var randomNode = new Node(0,0,"id0",0,"normal", "dead", []);
         var not_found = true;
@@ -435,53 +439,16 @@ var w = 10000;
           var any_change = new_or_not_big(side3, side2);
           if(!any_change){
 
-			  if(side1.length == 1 || side2.length == 1){
-				  for(r = 0; r < side1.length; r++){
-				  //console.log("side1");
-				  //console.log(side1[r][0].name);
-				    bundle.push(side1[r]);
-				  }
-				  for(r = 0; r < side2.length; r++){
-				  //console.log("side2");
-				  //console.log(side2[r][0].name);
-				    bundle.push(side2[r]);
-                  }
-			  }else{
-				  console.log("not trivial bundle");
-				  console.log("nodename" + nodeName);
-				  var nodeBool = false;
-
-				  for(r = 0; r < side1.length; r++){
-				              //console.log("side1");
-				              //console.log(side1[r][0].name);
-				              //bundle.push(side1[r]);
-				     if(side1[r][0].name == nodeName){
-					 nodeBool = true;
-					 }
-				  }
-				  console.log(nodeBool);
-				  if(nodeBool){
-					console.log("pushing side 1");
-					  for(r=0; r < side1.length; r++){
-					  //console.log(side1[r][0].name);
-						  bundle.push(side1[r]);
-					  }
-
-				  }
-				  else{
-					  console.log("pushing side 2");
-					  for(r=0; r < side2.length; r++){
-						  bundle.push(side2[r]);
-					  }
-				  }
-				              //for(r = 0; r < side2.length; r++){
-				              //console.log("side2");
-				              //console.log(side2[r][0].name);
-				              //  bundle.push(side2[r]);
-            //}
-			  }
-
-
+            for(r = 0; r < side1.length; r++){
+            //console.log("side1");
+            //console.log(side1[r][0].name);
+              bundle.push(side1[r]);
+            }
+            for(r = 0; r < side2.length; r++){
+            //console.log("side2");
+            //console.log(side2[r][0].name);
+              bundle.push(side2[r]);
+            }
             not_found = false;
             break;
           }
@@ -577,9 +544,57 @@ var w = 10000;
 
 	  }
 
+	  function indicateBundle(name, nodeMap, edgeMap, want){
+		  var node;
+		  for(i = 0; i < nodeMap.length; i++){
+			  if(nodeMap[i].name == name){
+			         node = nodeMap[i];
+	   			}
+		  }
+		  if(find_bundle([[node, false]], [], edgeMap).length == 0){
+		         //console.log("no right bundle");
+       			bundle = find_bundle([[node, true]], [], edgeMap);
+       			for(j = 0; j < bundle.length; j++){
+					if(want == true){
+						svg.selectAll("#" + bundle[j][0].name + "blue").attr("stroke-width", 2).attr("fill", "black");
+						svg.selectAll("#" + bundle[j][0].name + "red").attr("stroke-width", 2);
+					}else{
+						svg.selectAll("#" + bundle[j][0].name + "blue").attr("stroke-width", 4).attr("fill", "white");
+						svg.selectAll("#" + bundle[j][0].name + "red").attr("stroke-width", 4);
+					}
+
+				}
+			}
+		    else{
+				bundle = find_bundle([[node, false]], [], edgeMap);
+				for(j = 0; j < bundle.length; j++){
+					if(want == true){
+											svg.selectAll("#" + bundle[j][0].name + "blue").attr("stroke-width", 2).attr("fill", "black");
+											svg.selectAll("#" + bundle[j][0].name + "red").attr("stroke-width", 2);
+										}else{
+											svg.selectAll("#" + bundle[j][0].name + "blue").attr("stroke-width", 4).attr("fill", "white");
+											svg.selectAll("#" + bundle[j][0].name + "red").attr("stroke-width", 4);
+					}
+
+				}
+		    }
+
+	  }
+
+
+
       function collapseBundle(name, nodeMap, edgeMap){
       var node;
       for(i = 0; i < nodeMap.length; i++){
+
+		  console.log("Name: " + nodeMap[i].name);
+		  console.log("color: ");
+		  console.log(nodeMap[i].r);
+		  console.log(nodeMap[i].g);
+		  console.log(nodeMap[i].b);
+		  console.log("color ");
+
+
        if(nodeMap[i].name == name){
        node = nodeMap[i];
 	   }
@@ -616,8 +631,8 @@ var w = 10000;
 	   }
        var averageX = (totalX/bundle.length);
        var averageY = (totalY);
-       var newNode = new Node(averageX+50, averageY+50, newName, layer, "bundleCollapsed", "alive", bundle);
-       //var newNode2 = new Node(averageX+50, averageY+50, newName, layer, "bundleCollapsed", "alive", bundle);
+       var newNode = new Node(averageX+50, averageY+50, newName, layer, "bundleCollapsed", "alive", bundle, Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255));
+       //var newNode2 = new Node(averageX+50, averageY+50, newName, layer, "bundleCollapsed", "alive", bundle, Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255));
        newNode.getLeftNeighbors(edgeMap);
        newNode.getRightNeighbors(edgeMap);
 
@@ -754,7 +769,7 @@ var w = 10000;
           }
           var averageX = (totalX/allBundles[i].length);
           var averageY = (totalY/allBundles[i].length);
-          var newNode = new Node(averageX, averageY, newName, layer, "bundleCollapsed", "alive", allBundles[i]);
+          var newNode = new Node(averageX, averageY, newName, layer, "bundleCollapsed", "alive", allBundles[i], Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255));
           newNode.getLeftNeighbors(edgeMap);
           newNode.getRightNeighbors(edgeMap);
           nodeMap.push(newNode);
@@ -788,6 +803,12 @@ var w = 10000;
 
           newNode.present();
         }
+        for(i = 0; i < nodeMap.length; i++){
+					if(nodeMap[i].status == "alive"){
+						nodeMap[i].present();
+					}
+
+		}
 
       }
 
@@ -804,6 +825,7 @@ var w = 10000;
       //console.log(bundle.length);
       //console.log("this is the bundle I am expanding");
       for(i = 0; i < bundle.length; i++){
+
        //console.log(bundle[i][0].name);
 	  }
 
@@ -812,6 +834,7 @@ var w = 10000;
        for(i = 0; i < bundle.length; i++){
        //console.log(bundle[i][0].name);
        bundle[i][0].present();
+
        for(j = 0; j < nodeMap.length; j++){
         if(nodeMap[j].name == bundle[i][0].name){
             nodeMap[j].status = "alive";
@@ -899,6 +922,12 @@ var w = 10000;
 		}
         }
         cleanse();
+        for(i = 0; i < nodeMap.length; i++){
+			if(nodeMap[i].status == "alive"){
+				nodeMap[i].present();
+			}
+
+		}
 
 	  }
 
@@ -1102,7 +1131,7 @@ var w = 10000;
 
 
       class Node {
-        constructor(x, y, name, layerNum, type, status, bundle) {
+        constructor(x, y, name, layerNum, type, status, bundle, r, g, b) {
           this.x = x;
           this.y = y;
           this.name = name;
@@ -1116,6 +1145,9 @@ var w = 10000;
           this.bundle = bundle;
           this.leftSide = [];
           this.rightSide = [];
+          this.r = r;
+          this.g = g;
+          this.b = b;
         }
         present(){
           svg.append("rect")
@@ -1124,6 +1156,8 @@ var w = 10000;
           .attr("width", 10)
           .attr("height", 20)
           .attr("fill", "#f7f7f7")
+          .attr("stroke", d3.rgb(this.r, this.g, this.b))
+          .attr("stroke-width", 4)
           //.attr("visibility", "hidden")
           .attr("id", this.name+"red")
 
@@ -1133,6 +1167,8 @@ var w = 10000;
           .attr("y", this.y)
           .attr("width", 10)
           .attr("height", 20)
+          .attr("stroke", d3.rgb(this.r, this.g, this.b))
+          .attr("stroke-width", 4)
           .attr("fill", "#f7f7f7")
           .attr("id", this.name+"blue")
 
@@ -1140,21 +1176,42 @@ var w = 10000;
           .attr("class", this.name);
 
 
+          //var r = Math.floor(Math.random() * 255));
+          //var g = Math.floor(Math.random() * 255));
+          //var b = Math.floor(Math.random() * 255));
+
+
+
+		  //for(i = 0; i < nodeColors.length; i++){
+			//  console.log(nodeColors[i][0]);
+		//	  if(this.name == nodeColors[i][0]){
+		//		  r = nodeColors[i][1];
+		//		  g = nodeColors[i][2];
+		//		  b = nodeColors[i][3];
+		//	  }else{
+		//		  var nodeColor = [this.name, r, g, b];
+		 //		  nodeColors.push(nodeColor);
+		//	  }
+		  //}
+
+
+
+
 
 
           svg.selectAll("#" + this.name + "red")
-          .transition()
-          .attr("stroke", "white")
-          .attr("fill", "red")
-          .delay(100)
-          .duration(1200);
+          //.transition()
+
+          .attr("fill", "black");
+          //.delay(100)
+          //.duration(1200);
 
           svg.selectAll("#" + this.name + "blue")
-		  .transition()
-		  .attr("stroke", "white")
-		  .attr("fill", "blue")
-		  .delay(100)
-          .duration(1200);
+		  //.transition()
+
+		  .attr("fill", "white");
+		  //.delay(100)
+          //.duration(1200);
 
           var name = this.name;
 
@@ -1174,6 +1231,7 @@ var w = 10000;
 	  		.attr("y", ypos)
 	  		.attr("stroke", "blue")
 	  		.text(name);
+	  		indicateBundle(name, nodeMap, edgeMap, true);
 	  		svg.selectAll("#red").remove();
 			svg.selectAll("#blue").remove();
           });
@@ -1182,6 +1240,7 @@ var w = 10000;
 		  	svg.selectAll("text").remove();
 		  	svg.selectAll("#red").remove();
 			svg.selectAll("#blue").remove();
+			indicateBundle(name, nodeMap, edgeMap, false);
           });
 
           d3.select("body").select("svg").on("mouseover", function(){
@@ -1253,6 +1312,7 @@ var w = 10000;
             .attr("y2", this.node2.y+10)
             //.transition()
             .attr("stroke", "white")
+            .attr("stroke-width", 2)
             //.delay(500)
             //.duration(2500)
             //.transition()
@@ -1262,10 +1322,10 @@ var w = 10000;
             .attr("class", this.name);
 
             svg.selectAll("." + this.name)
-            .transition()
-            .attr("stroke", "black")
-            .delay(500)
-            .duration(1250);
+            //.transition()
+            .attr("stroke", "black");
+            //.delay(500)
+            //.duration(1250);
         }
       }
 }
