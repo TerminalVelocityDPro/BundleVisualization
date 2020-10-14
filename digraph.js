@@ -470,6 +470,73 @@ var w = 10000;
         return bundle;
       }
 
+      function find_bundleL(side1, side2, edgeMap){
+	          var bundle = [];
+	          var randomNode = new Node(0,0,"id0",0,"normal", "dead", []);
+	          var not_found = true;
+	          while(not_found){
+	            var overlap_there = check_overlap(side2, side1);
+	            if(overlap_there){
+	              //console.log("overlap");
+	              bundle = [];
+	              not_found = false;
+	              break;
+	            }
+	            var check_equal_neighbors = check_all_neighbors(side2, edgeMap);
+	            if(!check_equal_neighbors){
+	              //console.log("equal neighbors");
+	              bundle = [];
+	              not_found = false;
+	              break;
+	            }
+	            var side3 = adjust_sides(side2, side1, edgeMap);
+	            var any_change = new_or_not_big(side3, side1);
+	            if(!any_change){
+
+	              for(r = 0; r < side1.length; r++){
+	              //console.log("side1");
+	              //console.log(side1[r][0].name);
+	                bundle.push(side1[r]);
+	              }
+	              for(r = 0; r < side2.length; r++){
+	              //console.log("side2");
+	              //console.log(side2[r][0].name);
+	                bundle.push(side2[r]);
+	              }
+	              not_found = false;
+	              break;
+	            }
+	            else{
+	            //console.log("meme");
+	              side1 = [];
+	              for(r = 0; r < side3.length; r++){
+	                side1.push(side3[r]);
+	              }
+	              side3 = [];
+	              var a = side1;
+	              var b = side2;
+	              side1 = b;
+	              side2 = a;
+	            }
+	          }
+	          for(i = 0; i < bundle.length; i++){
+	          }
+	          return bundle;
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       function find_all_bundles(nodeMap, edgeMap, layer){
         var bundles = [];
         var avoid = [];
@@ -544,7 +611,53 @@ var w = 10000;
 
 	  }
 
-	  function indicateBundle(name, nodeMap, edgeMap, want){
+
+	  function indicateBundleL(name, nodeMap, edgeMap, want){
+	  		  var node;
+	  		  for(i = 0; i < nodeMap.length; i++){
+	  			  if(nodeMap[i].name == name){
+	  			         node = nodeMap[i];
+	  	   			}
+	  		  }
+	  		  if(find_bundleL([], [[node, true]], edgeMap).length == 0){
+
+	         			bundle = find_bundleL([], [[node, true]], edgeMap);
+	         			for(j = 0; j < bundle.length; j++){
+							//console.log("Left Bundle Node Name " + bundle[j][0].name);
+	  					if(want == true){
+	  						svg.selectAll("#" + bundle[j][0].name + "blue").attr("stroke-width", 2).attr("fill", "black");
+	  						svg.selectAll("#" + bundle[j][0].name + "red").attr("stroke-width", 2);
+	  					}else{
+	  						svg.selectAll("#" + bundle[j][0].name + "blue").attr("stroke-width", 4).attr("fill", "white");
+	  						svg.selectAll("#" + bundle[j][0].name + "red").attr("stroke-width", 4);
+	  					}
+
+	  				}
+	  			}
+	  		    else{
+	  				bundle = find_bundleL([], [[node, true]], edgeMap);
+	  				for(j = 0; j < bundle.length; j++){
+	  					if(want == true){
+	  											svg.selectAll("#" + bundle[j][0].name + "blue").attr("stroke-width", 2).attr("fill", "black");
+	  											svg.selectAll("#" + bundle[j][0].name + "red").attr("stroke-width", 2);
+	  										}else{
+	  											svg.selectAll("#" + bundle[j][0].name + "blue").attr("stroke-width", 4).attr("fill", "white");
+	  											svg.selectAll("#" + bundle[j][0].name + "red").attr("stroke-width", 4);
+	  					}
+
+	  				}
+	  		    }
+	  }
+
+
+
+
+
+
+
+
+
+	  function indicateBundleR(name, nodeMap, edgeMap, want){
 		  var node;
 		  for(i = 0; i < nodeMap.length; i++){
 			  if(nodeMap[i].name == name){
@@ -735,6 +848,179 @@ var w = 10000;
         remakeEdges(edgeMap);
 	  }
 
+
+	  function collapseBundleL(name, nodeMap, edgeMap){
+	        var node;
+	        for(i = 0; i < nodeMap.length; i++){
+
+	  		  console.log("Name: " + nodeMap[i].name);
+	  		  console.log("color: ");
+	  		  console.log(nodeMap[i].r);
+	  		  console.log(nodeMap[i].g);
+	  		  console.log(nodeMap[i].b);
+	  		  console.log("color ");
+
+
+	         if(nodeMap[i].name == name){
+	         node = nodeMap[i];
+	  	   }
+	  	  }
+
+
+	         if(find_bundleL([], [[node, true]], edgeMap).length == 0){
+	         console.log("no left bundle");
+	         bundle = find_bundleL([], [[node, false]], edgeMap);
+	         var totalX = 0;
+	         var totalY = 0;
+	         var newName = "";
+	         for(i = 0; i < bundle.length; i++){
+	          totalX = totalX + bundle[i][0].x;
+	          totalY = bundle[i][0].y;
+	          newName = newName + bundle[i][0].name;
+	          //console.log("getting removed " + bundle[i][0].name);
+	          svg.selectAll("." + bundle[i][0].name).remove();
+	  	   }
+	  	   }
+	         else{
+	         console.log("welp there is a left bundle");
+	         bundle = find_bundleL([], [[node, true]], edgeMap);
+	         var totalX = 0;
+	         var totalY = 0;
+	         var newName = "";
+	         for(i = 0; i < bundle.length; i++){
+	          totalX = totalX + bundle[i][0].x;
+	          totalY = bundle[i][0].y;
+	          newName = newName + bundle[i][0].name;
+	          //console.log("getting removed " + bundle[i][0].name);
+	          svg.selectAll("." + bundle[i][0].name).remove();
+	  	   }
+	  	   }
+	         var averageX = (totalX/bundle.length);
+	         var averageY = (totalY);
+	         var newNode = new Node(averageX+50, averageY+50, newName, layer, "bundleCollapsed", "alive", bundle, Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255));
+	         //var newNode2 = new Node(averageX+50, averageY+50, newName, layer, "bundleCollapsed", "alive", bundle, Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255));
+	         newNode.getLeftNeighbors(edgeMap);
+	         newNode.getRightNeighbors(edgeMap);
+	         console.log("point");
+
+	         for(j = 0; j < nodeMap.length; j++){
+	          for(k = 0; k < bundle.length; k++){
+	              if(nodeMap[j].name == bundle[k][0].name){
+	                 nodeMap[j].status = "bundleZombie";
+	  			}
+	  		}
+	  	   }
+
+	         for(j = 0; j < edgeMap.length; j++){
+	              for(k = 0; k < bundle.length; k++){
+	                if(edgeMap[j].node1.name == bundle[k][0].name){
+
+	                  edgeMap[j].node1.status = "bundleZombie";
+	                  edgeMap[j].vis = "invis";
+	                  svg.selectAll("." + edgeMap[j].node1.name).remove();
+	                  //svg.selectAll("." + edgeMap[j].node2.name).remove();
+	                  svg.selectAll("." + edgeMap[j].name).remove();
+	                  var flag = true;
+	                  for(m = 0; m < bundle.length; m++){
+	                      if(bundle[m][0].name == edgeMap[j].node2.name || edgeMap[j].node2.status == "bundleZombie"){
+
+	                      flag = false;
+	  					}
+	  				}
+	                  if(flag){
+	                  var newEdge = new Edge(newNode, edgeMap[j].node2, 0, "vis");
+	                  //console.log("left side");
+	                  //console.log("This is new edge: " + newEdge.node1.name + " " + newEdge.node2.name);
+	                  edgeMap.push(newEdge);
+	                  newEdge.establish();
+	                  //edgeMap[j].node2.present();
+	  				}
+
+
+	                }
+	                if(edgeMap[j].node2.name == bundle[k][0].name){
+	                //console.log("getting considererd");
+	                //console.log(edgeMap[j].node1.name);
+	                //console.log("getting conc");
+
+	                  edgeMap[j].node2.status = "bundleZombie";
+	                  edgeMap[j].vis = "invis";
+	                  //svg.selectAll("." + edgeMap[j].node1.name).remove();
+	                  svg.selectAll("." + edgeMap[j].node2.name).remove();
+	                  svg.selectAll("." + edgeMap[j].name).remove();
+
+	                  var flag = true;
+	                  for(m = 0; m < bundle.length; m++){
+	                      if(bundle[m][0].name == edgeMap[j].node1.name || edgeMap[j].node1.status == "bundleZombie"  ){
+	                      flag = false;
+	  					}
+	  				}
+	                  if(flag){
+	                  var newEdge = new Edge(edgeMap[j].node1, newNode, 0, "vis");
+	                  //console.log("right side");
+	                  //console.log("This is new edge: " + newEdge.node1.name + " " + newEdge.node2.name);
+	                  edgeMap.push(newEdge);
+	                  newEdge.establish();
+	                  //edgeMap[j].node1.present();
+	  				}
+
+
+	                }
+	              }
+	            }
+
+	          newNode.present();
+	          //newNode2.present();
+	          svg.selectAll("#red").remove();
+	  			svg.selectAll("#blue").remove();
+
+
+
+	          for(i = 0; i < edgeMap.length; i++){
+	            if(edgeMap[i].vis == "invis"){
+	              //console.log("deleting edge " + edgeMap[i].name);
+	              svg.selectAll("." + edgeMap[i].name).remove();
+	            }
+	          }
+	          //console.log("This is the bundle I just collapsed");
+	          for(i = 0; i < bundle.length; i++){
+	              //console.log(bundle[i][0].name);
+	  		}
+
+
+
+
+
+	          //console.log("x position");
+	          //console.log(newNode.x);
+	          //newNode.present();
+	          nodeMap.push(newNode);
+	          //remakeNodes(nodeMap);
+
+	          //adjustBundleEdges(nodeMap,edgeMap);
+	          checkDuplicateEdges(edgeMap);
+	          remakeEdges(edgeMap);
+	  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       function finalCollapseBundle(name, nodeMap, edgeMap){
 		  svg.selectAll("#red").remove();
 			svg.selectAll("#blue").remove();
@@ -755,6 +1041,32 @@ var w = 10000;
 			svg.selectAll("#blue").remove();
 
 	  }
+
+	  function finalCollapseBundleL(name, nodeMap, edgeMap){
+	  		  svg.selectAll("#red").remove();
+	  			svg.selectAll("#blue").remove();
+
+	  			collapseBundleL(name, nodeMap, edgeMap);
+	  			svg.selectAll("#red").remove();
+	  			svg.selectAll("#blue").remove();
+
+
+	         for(i = 0; i < nodeMap.length; i++){
+	         if(nodeMap[i].status == "alive"){
+	  		   console.log(nodeMap[i].name);
+	          nodeMap[i].present();
+	  	   }
+	  	   console.log(nodeMap[i].name);
+	  	   }
+	  	   svg.selectAll("#red").remove();
+	  			svg.selectAll("#blue").remove();
+
+	  }
+
+
+
+
+
 
       function collapseBundles(nodeMap, edgeMap, allBundles, layer){
         for(i = 0; i < allBundles.length; i++){
@@ -1153,7 +1465,7 @@ var w = 10000;
           svg.append("rect")
           .attr("x", this.x)
           .attr("y", this.y)
-          .attr("width", 10)
+          .attr("width", 20)
           .attr("height", 20)
           .attr("fill", "#f7f7f7")
           .attr("stroke", d3.rgb(this.r, this.g, this.b))
@@ -1163,9 +1475,9 @@ var w = 10000;
 
           .attr("class", this.name);
           svg.append("rect")
-          .attr("x", this.x+10)
+          .attr("x", this.x+20)
           .attr("y", this.y)
-          .attr("width", 10)
+          .attr("width", 20)
           .attr("height", 20)
           .attr("stroke", d3.rgb(this.r, this.g, this.b))
           .attr("stroke-width", 4)
@@ -1223,24 +1535,45 @@ var w = 10000;
 
 
           var node = svg.selectAll("." + this.name);
+          var nodeL = svg.selectAll("#" + this.name + "red");
+          var nodeR = svg.selectAll("#" + this.name + "blue");
 
-          node.on("mouseover", function(){
+          nodeL.on("mouseover", function(){
+		  	  console.log(name);
+		  	  svg.append("text")
+		  	  .attr("x", xpos)
+		  	  .attr("y", ypos)
+		  	  .attr("stroke", "blue")
+		  	  .text(name);
+		  	  indicateBundleL(name, nodeMap, edgeMap, true);
+		  	  svg.selectAll("#red").remove();
+		  	  svg.selectAll("#blue").remove();
+          });
+
+          nodeL.on("mouseout", function(){
+		  		  svg.selectAll("text").remove();
+		  		svg.selectAll("#red").remove();
+		  		svg.selectAll("#blue").remove();
+		  		indicateBundleL(name, nodeMap, edgeMap, false);
+          });
+
+          nodeR.on("mouseover", function(){
 	  		console.log(name);
 	  		svg.append("text")
 	  		.attr("x", xpos)
 	  		.attr("y", ypos)
 	  		.attr("stroke", "blue")
 	  		.text(name);
-	  		indicateBundle(name, nodeMap, edgeMap, true);
+	  		indicateBundleR(name, nodeMap, edgeMap, true);
 	  		svg.selectAll("#red").remove();
 			svg.selectAll("#blue").remove();
           });
 
-          node.on("mouseout", function(){
+          nodeR.on("mouseout", function(){
 		  	svg.selectAll("text").remove();
 		  	svg.selectAll("#red").remove();
 			svg.selectAll("#blue").remove();
-			indicateBundle(name, nodeMap, edgeMap, false);
+			indicateBundleR(name, nodeMap, edgeMap, false);
           });
 
           d3.select("body").select("svg").on("mouseover", function(){
@@ -1248,7 +1581,7 @@ var w = 10000;
 			svg.selectAll("#blue").remove();
 		  });
 
-          node.on("click", function(){
+          nodeR.on("click", function(){
 			svg.selectAll("#red").remove();
 			svg.selectAll("#blue").remove();
           if(d3.event.ctrlKey){
@@ -1262,6 +1595,23 @@ var w = 10000;
           finalExpandBundle(nodeMap, edgeMap, name);
           svg.selectAll("text").remove();
 		  }
+
+          });
+
+          nodeL.on("click", function(){
+		  			svg.selectAll("#red").remove();
+		  			svg.selectAll("#blue").remove();
+		            if(d3.event.ctrlKey){
+		            finalCollapseBundleL(name, nodeMap, edgeMap);
+
+
+		            svg.selectAll("text").remove();
+		  		  }else{
+		            //console.log("start");
+		            //console.log("end");
+		            finalExpandBundle(nodeMap, edgeMap, name);
+		            svg.selectAll("text").remove();
+		  		  }
 
           });
 
@@ -1306,7 +1656,7 @@ var w = 10000;
         }
         establish(){
             svg.append("line")
-            .attr("x1", this.node1.x+20)
+            .attr("x1", this.node1.x+40)
             .attr("y1", this.node1.y+10)
             .attr("x2", this.node2.x)
             .attr("y2", this.node2.y+10)
